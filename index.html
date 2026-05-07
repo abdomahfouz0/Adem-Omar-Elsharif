@@ -30,9 +30,9 @@
 
         @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        /* غبار النجوم السحري */
+        /* غبار النجوم */
         .particle { position: fixed; pointer-events: none; border-radius: 50%; background: var(--gold); z-index: 9999; animation: fadeParticle 1s forwards; }
-        @keyframes fadeParticle { to { transform: scale(2.5) rotate(45deg); opacity: 0; } }
+        @keyframes fadeParticle { to { transform: scale(3) rotate(45deg); opacity: 0; } }
 
         /* شاشة الاستقبال */
         #welcome-screen {
@@ -41,7 +41,7 @@
             text-align: center; transition: 1.2s ease-in-out;
         }
         .enter-btn {
-            background: var(--baby-blue); color: white; padding: 25px 60px;
+            background: var(--baby-blue); color: white; padding: 25px 65px;
             border: none; border-radius: 60px; font-size: 26px; font-weight: bold;
             cursor: pointer; box-shadow: 0 15px 30px rgba(137, 207, 240, 0.5);
             transition: 0.4s ease; border: 3px solid white;
@@ -51,24 +51,18 @@
         .container { width: 92%; max-width: 550px; display: none; flex-direction: column; gap: 25px; padding: 50px 0; z-index: 10; }
         
         .card {
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.88);
             backdrop-filter: blur(15px);
             border-radius: 40px; padding: 30px;
             box-shadow: 0 20px 45px rgba(0,0,0,0.05);
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.7);
             text-align: center;
             animation: fadeIn 1.2s ease-out;
         }
 
         .baby-name { color: var(--royal-blue); font-size: 38px; font-weight: 900; margin: 10px 0; animation: gentlePulse 3s infinite; }
 
-        /* الخط الزمني */
-        .timeline { display: flex; justify-content: space-between; position: relative; margin: 20px 0; padding: 0 10px; }
-        .timeline::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 2px; background: #eee; z-index: 1; }
-        .milestone { width: 35px; height: 35px; background: var(--white); border: 2px solid var(--baby-blue); border-radius: 50%; z-index: 2; display: flex; align-items: center; justify-content: center; font-size: 15px; }
-        .milestone.active { background: var(--baby-blue); color: white; transform: scale(1.2); box-shadow: 0 0 10px var(--baby-blue); }
-
-        /* العداد */
+        /* العداد المطور */
         .timer-glow {
             background: linear-gradient(45deg, var(--baby-blue), var(--royal-blue));
             color: white; padding: 25px; border-radius: 35px; font-size: 24px;
@@ -81,38 +75,31 @@
         .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
         .flip-front, .flip-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; border-radius: 25px; font-weight: bold; }
         .flip-front { background: var(--soft-blue); color: var(--royal-blue); border: 2px dashed var(--baby-blue); }
-        .flip-back { background: var(--royal-blue); color: white; transform: rotateY(180deg); padding: 15px; font-size: 14px; line-height: 1.5; }
+        .flip-back { background: var(--royal-blue); color: white; transform: rotateY(180deg); padding: 15px; font-size: 14px; }
 
-        /* عداد القلوب */
-        .heart-btn { background: #ff4d6d; color: white; border: none; padding: 15px 30px; border-radius: 35px; cursor: pointer; font-weight: bold; font-size: 18px; transition: 0.3s; }
-        #heart-count { color: #ff4d6d; font-size: 20px; font-weight: bold; margin-top: 10px; }
+        /* البزازة السحرية */
+        .giggle-btn { font-size: 45px; cursor: pointer; animation: bounce 2s infinite; display: inline-block; margin: 10px 0; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
-        /* رسالة الترحيب */
+        /* تفاعل القلوب */
+        .heart-btn { background: #ff4d6d; color: white; border: none; padding: 15px 35px; border-radius: 40px; cursor: pointer; font-weight: bold; font-size: 18px; box-shadow: 0 8px 20px rgba(255, 77, 109, 0.3); transition: 0.3s; }
+        .heart-btn:hover { transform: scale(1.05); }
+
         .message-box { line-height: 2.2; font-size: 20px; color: #2D3436; text-align: right; min-height: 180px; padding: 10px; }
 
-        /* زر الواتساب الجديد (سماوي وببرونات) */
+        /* زر الواتساب السماوي بالبزازات */
         .btn-wa-cyan {
-            background: var(--baby-blue);
-            color: white;
-            padding: 22px;
-            border-radius: 40px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            box-shadow: 0 15px 35px rgba(137, 207, 240, 0.4);
-            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 2.5px solid white;
+            background: var(--baby-blue); color: white; padding: 22px; border-radius: 40px; text-decoration: none;
+            font-weight: bold; font-size: 24px; display: flex; align-items: center; justify-content: center; gap: 15px;
+            box-shadow: 0 15px 35px rgba(137, 207, 240, 0.4); border: 2.5px solid white; transition: 0.3s;
         }
         .btn-wa-cyan:hover { transform: translateY(-8px); filter: brightness(1.05); }
 
+        /* زينة طائرة */
         .balloon { position: fixed; font-size: 35px; z-index: -1; animation: floatBalloon 12s linear infinite; opacity: 0.6; }
-        @keyframes floatBalloon { from { bottom: -100px; transform: translateX(0); } to { bottom: 110vh; transform: translateX(80px); } }
+        @keyframes floatBalloon { from { bottom: -100px; } to { bottom: 110vh; } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes gentlePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+        @keyframes gentlePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
 
         #player { position: absolute; top: -1000px; }
     </style>
@@ -120,7 +107,7 @@
 <body>
 
     <div id="welcome-screen">
-        <div style="font-size: 85px; margin-bottom: 25px;">👑👼🏻</div>
+        <div style="font-size: 85px; margin-bottom: 20px;">🤴🏻✨</div>
         <button class="enter-btn" onclick="startApp()">استقبال الأمير آدم 💙</button>
         <p style="margin-top: 15px; color: #888; font-weight: bold; letter-spacing: 1px;">أهلاً بك في عالم آدم الصغير</p>
     </div>
@@ -131,14 +118,8 @@
         <div class="card">
             <h2 style="color: var(--gold); margin: 0; font-size: 20px;">بفضل الله أشرقت دنيانا بـ</h2>
             <div class="baby-name">آدم عمر الشريف</div>
+            <div style="font-size: 45px; margin-top: 10px;">👑👶🏻</div>
             
-            <div class="timeline">
-                <div class="milestone">🍼</div>
-                <div class="milestone">🤰</div>
-                <div class="milestone">🧸</div>
-                <div class="milestone active">✨</div>
-            </div>
-
             <div class="flip-card">
                 <div class="flip-card-inner">
                     <div class="flip-front">ما معنى اسم آدم؟ (المسه لتعرف) ✨</div>
@@ -148,25 +129,30 @@
         </div>
 
         <div class="card">
-            <div style="font-size: 19px; color: #666; font-weight: bold; margin-bottom: 15px;">نور دنيتنا منذ:</div>
+            <div style="font-size: 19px; color: #666; font-weight: bold; margin-bottom: 15px;">آدم ينير حياتنا منذ:</div>
             <div class="timer-glow" id="timer">00d : 00h : 00m : 00s</div>
         </div>
 
         <div class="card">
-            <p style="margin-bottom: 10px; font-weight: bold;">أرسل نبضة حب للأمير آدم:</p>
-            <button class="heart-btn" onclick="addHeart()">إرسال قلب ❤️</button>
-            <div id="heart-count">0 قلب تم إرساله</div>
+            <p style="margin-bottom: 10px; font-weight: bold; color: var(--royal-blue);">دوسي على الببرونة وشوفي ضحكة آدم 🍼</p>
+            <div class="giggle-btn" onclick="makeAdamSmile()">🍼</div>
+            <div id="smile-msg" style="margin-top: 10px; font-weight: bold; color: var(--gold); display: none;">آدم بيضحكلك دلوقتي! 😍</div>
+        </div>
+
+        <div class="card">
+            <button class="heart-btn" onclick="addHeart()">إرسال نبضة حب ❤️</button>
+            <div id="heart-count" style="margin-top:10px; font-weight:bold; color:#ff4d6d;">0 قلب تم إرساله</div>
         </div>
 
         <div class="card">
             <div id="welcome-msg" class="message-box"></div>
         </div>
 
-        <div class="card" style="background: rgba(255, 215, 0, 0.12); border: 2px solid var(--gold);">
+        <div class="card" style="background: rgba(212, 175, 55, 0.1); border: 2px solid var(--gold);">
             <p style="margin: 0; font-weight: bold; color: #b8860b; font-size: 18px;">
                 🌟 مولود اليوم 7 مايو.. برج "الثور" 🐂 ✨
             </p>
-            <p style="font-size: 13px; color: #888; margin-top: 5px;">يتميز بالصبر، الحنان، والقلب الذهبي</p>
+            <p style="font-size: 13px; color: #888; margin-top: 8px;">"أُعيذك بكلمات الله التامة من كل شيطان وهامة ومن كل عين لامة" 🤲🏻</p>
         </div>
 
         <a href="https://wa.me/201031319239?text=بفضل%20الله%20رزقنا%20اليوم%20بأجمل%20نعمة%20🤍👶🏻%20آدم%20عمر%20الشريف%20نور%20حياتنا%20وفرّح%20قلوبنا..%20ألف%20مليون%20مبروك%20يتربى%20في%20عزكم%20يا%20بطل%20💙" class="btn-wa-cyan">
@@ -192,7 +178,15 @@
                 setInterval(updateTimer, 1000);
                 startBalloons();
                 typeWriter();
-            }, 1200);
+            }, 1000);
+        }
+
+        function makeAdamSmile() {
+            document.getElementById('smile-msg').style.display = 'block';
+            for(let i=0; i<15; i++) {
+                createParticle(window.innerWidth/2 + (Math.random()*50-25), window.innerHeight/2 + (Math.random()*50-25));
+            }
+            setTimeout(() => document.getElementById('smile-msg').style.display = 'none', 3000);
         }
 
         let heartCounts = 0;
@@ -205,22 +199,23 @@
             h.style.left = Math.random() * 100 + 'vw';
             h.style.bottom = '0';
             h.style.fontSize = '35px';
-            h.style.zIndex = '1000';
-            h.style.animation = 'floatBalloon 3s forwards ease-out';
+            h.style.animation = 'floatBalloon 3s forwards';
             document.body.appendChild(h);
             setTimeout(() => h.remove(), 3000);
         }
 
-        document.addEventListener('mousemove', (e) => {
+        function createParticle(x, y) {
             const p = document.createElement('div');
             p.className = 'particle';
-            p.style.left = e.pageX + 'px';
-            p.style.top = e.pageY + 'px';
-            const size = Math.random() * 6 + 2 + 'px';
-            p.style.width = size; p.style.height = size;
+            p.style.left = x + 'px'; p.style.top = y + 'px';
+            const s = Math.random() * 8 + 4 + 'px';
+            p.style.width = s; p.style.height = s;
             document.body.appendChild(p);
             setTimeout(() => p.remove(), 1000);
-        });
+        }
+
+        document.addEventListener('mousemove', (e) => createParticle(e.pageX, e.pageY));
+        document.addEventListener('touchmove', (e) => createParticle(e.touches[0].pageX, e.touches[0].pageY));
 
         function updateTimer() {
             const birth = new Date("2026-05-07T04:00:00");
@@ -233,15 +228,14 @@
         let charI = 0;
         function typeWriter() {
             if (charI < text.length) {
-                const char = text.charAt(charI);
-                document.getElementById("welcome-msg").innerHTML += (char === "\n" ? "<br>" : char);
+                document.getElementById("welcome-msg").innerHTML += text.charAt(charI) === "\n" ? "<br>" : text.charAt(charI);
                 charI++;
                 setTimeout(typeWriter, 50);
             }
         }
 
         function startBalloons() {
-            const icons = ['🎈', '🧸', '🍼', '💙', '☁️', '🍼', '✨'];
+            const icons = ['🎈', '🧸', '🍼', '💙', '✨', '☁️'];
             setInterval(() => {
                 const b = document.createElement('div');
                 b.className = 'balloon';
