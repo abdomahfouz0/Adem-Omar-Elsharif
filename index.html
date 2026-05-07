@@ -116,7 +116,7 @@
 <body>
 
     <div id="welcome-screen">
-        <div style="font-size: 85px; margin-bottom: 20px;">👸🏻✨</div>
+        <div style="font-size: 85px; margin-bottom: 20px;">🤴🏻✨</div>
         <button class="enter-btn" onclick="startApp()">استقبال الأمير آدم 💙</button>
         <p style="margin-top: 15px; color: #888; font-weight: bold;">أهلاً بك في عالم آدم عمر الشريف</p>
     </div>
@@ -130,7 +130,7 @@
             <div class="flip-card">
                 <div class="flip-card-inner">
                     <div class="flip-front">ما معنى اسم آدم؟ ✨</div>
-                    <div class="flip-back">آدم: هو الإنسان الأول، ومعناه الرجل المخلوق من "أدمة الأرض"، ويرمز للبدايات الجديدة والنقاء.</div>
+                    <div class="flip-back">آدم: هو الإنسان الأول، ومعناه الرجل المخلوق من "أدمة الأرض"، ويرمز للنقاء والبدايات الجديدة.</div>
                 </div>
             </div>
         </div>
@@ -196,7 +196,6 @@
                 setInterval(updateTimer, 1000);
                 startBalloons();
                 typeWriter();
-                // التحقق من الاسم المحفوظ
                 const savedName = localStorage.getItem('adam_guest');
                 if(savedName) {
                     document.getElementById('welcome-alert').innerText = `أهلاً بعودتك يا ${savedName}، نورت مملكة آدم! 😍`;
@@ -216,4 +215,74 @@
 
         function updateTimer() {
             const birth = new Date("2026-05-07T04:00:00");
-            const diff = new
+            const diff = new Date() - birth;
+            const d = Math.floor(diff/86400000), h = Math.floor(diff%86400000/3600000), m = Math.floor(diff%3600000/60000), s = Math.floor(diff%60000/1000);
+            document.getElementById('timer').innerText = `${d}d : ${h}h : ${m}m : ${s}s`;
+            const breaths = Math.floor(diff / 1000 / 60 * 40);
+            document.getElementById('breath-count').innerText = `آدم أتمّ تقريباً ${breaths.toLocaleString()} نَفساً في دنيانا 💙`;
+        }
+
+        function sendGift(emoji) {
+            const gift = document.createElement('div');
+            gift.innerHTML = emoji; gift.style.position = 'fixed';
+            gift.style.left = Math.random() * 80 + 10 + 'vw'; gift.style.bottom = '0';
+            gift.style.fontSize = '50px'; gift.style.zIndex = '1000';
+            gift.style.animation = 'floatUp 4s forwards ease-out';
+            document.body.appendChild(gift);
+            setTimeout(() => gift.remove(), 4000);
+        }
+
+        let heartCounts = 0;
+        function addHeart() { 
+            heartCounts++; 
+            document.getElementById('heart-count').innerText = heartCounts + " قلب تم إرساله"; 
+            sendGift('❤️');
+            triggerShake(); 
+        }
+
+        function makeAdamSmile() {
+            triggerShake();
+            alert("آدم بيضحكلك دلوقتي! 😍✨");
+            for(let i=0; i<15; i++) createParticle(window.innerWidth/2, window.innerHeight/2);
+        }
+
+        function createParticle(x, y) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.left = x + 'px'; p.style.top = y + 'px';
+            const s = Math.random() * 8 + 4 + 'px';
+            p.style.width = s; p.style.height = s;
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), 1000);
+        }
+
+        document.addEventListener('mousemove', (e) => createParticle(e.pageX, e.pageY));
+        document.addEventListener('touchmove', (e) => createParticle(e.touches[0].pageX, e.touches[0].pageY));
+
+        const text = "بفضل الله رزقنا اليوم بأجمل نعمة 🤍👶🏻\n“آدم عمر الشريف” نَوَّر حياتنا وفرّح قلوبنا ✨\nاللهم أنبته نباتًا حسنًا، واجعله من عبادك الصالحين، واحفظه بعينك التي لا تنام 🤲🏻💙\nبما انك وصلت لهنا اعرف انك شخص غالي عندي وحبيت اشاركك فرحتي.. وشكرًا ليك لو شاركنا فرحتنا 🌸🎉";
+        let charI = 0;
+        function typeWriter() {
+            if (charI < text.length) {
+                const char = text.charAt(charI);
+                document.getElementById("welcome-msg").innerHTML += (char === "\n" ? "<br>" : char);
+                charI++; setTimeout(typeWriter, 50);
+            }
+        }
+
+        function startBalloons() {
+            const icons = ['🎈', '🧸', '🍼', '💙', '✨', '☁️'];
+            setInterval(() => {
+                const b = document.createElement('div');
+                b.className = 'balloon';
+                b.innerHTML = icons[Math.floor(Math.random() * icons.length)];
+                b.style.left = Math.random() * 100 + 'vw';
+                document.body.appendChild(b);
+                setTimeout(() => b.remove(), 10000);
+            }, 1000);
+        }
+
+        var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0]; firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    </script>
+</body>
+</html>
