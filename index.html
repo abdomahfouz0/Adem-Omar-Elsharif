@@ -19,133 +19,88 @@
             color: #334155;
             font-family: 'Segoe UI', Tahoma, sans-serif;
             margin: 0;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
             overflow-x: hidden;
-            touch-action: manipulation;
         }
         @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         
-        /* تأثير الاهتزاز */
-        .shake { animation: shakeAnim 0.5s cubic-bezier(.36,.07,.19,.97) both; }
-        @keyframes shakeAnim {
-            10%, 90% { transform: translate3d(-1px, 0, 0); }
-            20%, 80% { transform: translate3d(2px, 0, 0); }
-            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-            40%, 60% { transform: translate3d(4px, 0, 0); }
+        /* شاشة الاستقبال */
+        #welcome-screen {
+            position: fixed; inset: 0; background: white; z-index: 5000;
+            display: flex; align-items: center; justify-content: center; flex-direction: column;
+            text-align: center; transition: 0.8s ease-in-out;
+        }
+        .enter-btn {
+            background: var(--baby-blue); color: white; padding: 22px 60px;
+            border: none; border-radius: 50px; font-size: 24px; font-weight: bold;
+            cursor: pointer; box-shadow: 0 10px 25px rgba(137, 207, 240, 0.4);
+            transition: 0.3s; z-index: 5001;
+        }
+
+        /* الحاوية الرئيسية */
+        .container { width: 92%; max-width: 500px; display: none; flex-direction: column; gap: 20px; padding: 40px 0; }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 35px; padding: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            text-align: center;
+        }
+
+        .birth-frame { border: 2px solid var(--gold); border-radius: 20px; padding: 15px; margin: 15px 0; background: #fffdf5; }
+        .birth-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 14px; }
+        .val { color: var(--royal-blue); font-weight: 900; }
+
+        .baby-name {
+            font-size: 34px; font-weight: 900; margin: 10px 0;
+            color: var(--royal-blue);
+        }
+
+        .timer-glow { background: linear-gradient(45deg, var(--baby-blue), var(--royal-blue)); color: white; padding: 20px; border-radius: 25px; font-size: 22px; font-weight: bold; direction: ltr; }
+
+        .guest-input { width: 85%; padding: 12px; border-radius: 15px; border: 2px solid var(--soft-blue); margin-bottom: 10px; text-align: center; }
+        .guest-btn { background: var(--gold); color: white; border: none; padding: 10px 25px; border-radius: 20px; font-weight: bold; }
+
+        .btn-wa-cyan {
+            background: var(--baby-blue); color: white; padding: 20px; border-radius: 35px; text-decoration: none;
+            font-weight: bold; font-size: 22px; display: flex; align-items: center; justify-content: center; gap: 10px;
+            box-shadow: 0 10px 25px rgba(137, 207, 240, 0.3);
         }
         
         .particle { position: fixed; pointer-events: none; border-radius: 50%; background: var(--gold); z-index: 9999; animation: fadeParticle 1s forwards; }
         @keyframes fadeParticle { to { transform: scale(2.5); opacity: 0; } }
-        
-        #welcome-screen {
-            position: fixed; inset: 0; background: white; z-index: 5000;
-            display: flex; align-items: center; justify-content: center; flex-direction: column;
-            text-align: center; transition: 1.2s ease-in-out;
-        }
-        .enter-btn {
-            background: var(--baby-blue); color: white; padding: 25px 65px;
-            border: none; border-radius: 60px; font-size: 26px; font-weight: bold;
-            cursor: pointer; box-shadow: 0 15px 30px rgba(137, 207, 240, 0.5);
-            transition: 0.4s ease; border: 3px solid white;
-        }
-        
-        .container { width: 92%; max-width: 550px; display: none; flex-direction: column; gap: 25px; padding: 50px 0; z-index: 10; }
-        
-        .card {
-            background: rgba(255, 255, 255, 0.88);
-            backdrop-filter: blur(15px);
-            border-radius: 40px; padding: 30px;
-            box-shadow: 0 20px 45px rgba(0,0,0,0.05);
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            text-align: center;
-            animation: fadeIn 1.2s ease-out;
-            position: relative;
-        }
-
-        /* برواز بيانات الميلاد */
-        .birth-frame {
-            border: 2px solid var(--gold);
-            border-radius: 25px;
-            padding: 20px;
-            margin: 15px 0;
-            background: linear-gradient(135deg, var(--white) 0%, #fff9f0 100%);
-            position: relative;
-        }
-        .birth-frame::before { content: '📜'; position: absolute; top: -15px; right: 20px; background: white; padding: 0 10px; font-size: 20px; }
-        .birth-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: right; }
-        .info-label { color: var(--gold); font-weight: bold; font-size: 14px; }
-        .info-value { color: var(--royal-blue); font-weight: 900; font-size: 16px; display: block; }
-
-        .baby-name {
-            color: var(--royal-blue); font-size: 38px; font-weight: 900; margin: 10px 0;
-            background: linear-gradient(to right, var(--royal-blue) 20%, var(--gold) 40%, var(--gold) 60%, var(--royal-blue) 80%);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shine 3s linear infinite;
-        }
-        @keyframes shine { to { background-position: 200% center; } }
-        
-        .timer-glow {
-            background: linear-gradient(45deg, var(--baby-blue), var(--royal-blue));
-            color: white; padding: 25px; border-radius: 35px; font-size: 24px;
-            font-weight: bold; direction: ltr; box-shadow: 0 10px 25px rgba(162, 210, 255, 0.4);
-        }
-        
-        .flip-card { height: 90px; cursor: pointer; perspective: 1000px; margin: 10px 0; }
-        .flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
-        .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
-        .flip-front, .flip-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; border-radius: 25px; font-weight: bold; }
-        .flip-front { background: var(--soft-blue); color: var(--royal-blue); border: 2px dashed var(--baby-blue); }
-        .flip-back { background: var(--royal-blue); color: white; transform: rotateY(180deg); padding: 15px; font-size: 14px; }
-        
-        .guest-input { width: 85%; padding: 12px; border-radius: 15px; border: 2px solid var(--soft-blue); margin-bottom: 10px; text-align: center; outline: none; font-size: 16px; }
-        .guest-btn { background: var(--gold); color: white; border: none; padding: 10px 25px; border-radius: 20px; cursor: pointer; font-weight: bold; }
-        .gift-btn { background: var(--gold); color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; margin: 5px; }
-        .message-box { line-height: 2.2; font-size: 20px; color: #2D3436; text-align: right; min-height: 180px; padding: 10px; }
-        
-        .btn-wa-cyan {
-            background: var(--baby-blue); color: white; padding: 22px; border-radius: 40px; text-decoration: none;
-            font-weight: bold; font-size: 24px; display: flex; align-items: center; justify-content: center; gap: 15px;
-            box-shadow: 0 15px 35px rgba(137, 207, 240, 0.4); border: 2.5px solid white; transition: 0.3s;
-        }
-        .balloon { position: fixed; font-size: 35px; z-index: -1; animation: floatUp 10s linear infinite; opacity: 0.6; }
-        @keyframes floatUp { from { bottom: -100px; opacity: 0; } to { bottom: 110vh; opacity: 1; transform: rotate(360deg); } }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        
-        #player, #landing-player { position: absolute; top: -1000px; visibility: hidden; pointer-events: none; }
+        #player-ui { position: fixed; top: -1000px; }
     </style>
 </head>
-<body onclick="activateLandingMusic()">
+<body onclick="enableAudio()">
+
     <div id="welcome-screen">
-        <div style="font-size: 85px; margin-bottom: 20px;">🤴🏻✨</div>
+        <div style="font-size: 80px; margin-bottom: 20px;">🤴🏻✨</div>
         <button class="enter-btn" onclick="startApp()">استقبال الأمير آدم 💙</button>
-        <p style="margin-top: 15px; color: #888; font-weight: bold;">أهلاً بك في عالم آدم عمر الشريف</p>
-        <p style="font-size: 12px; color: #ccc;">(المس أي مكان لتنشيط الموسيقى 🎶)</p>
+        <p style="margin-top: 15px; color: #888; font-weight: bold;">اضغط للدخول إلى عالم آدم</p>
+        <p style="font-size: 11px; color: #bbb;">(المس الشاشة في أي مكان لتنشيط الصوت)</p>
     </div>
-    
-    <div id="landing-player"></div>
-    <div id="player"></div>
+
+    <div id="player-ui">
+        <div id="landing-player"></div>
+        <div id="main-player"></div>
+    </div>
 
     <div class="container" id="main-container">
         <div class="card">
             <h2 style="color: var(--gold); margin: 0; font-size: 18px;">بفضل الله رزقنا بـ</h2>
             <div class="baby-name">آدم عمر الشريف</div>
             <div class="birth-frame">
-                <div class="birth-info-grid">
-                    <div><span class="info-label">اليوم:</span><span class="info-value">الخميس</span></div>
-                    <div><span class="info-label">التاريخ:</span><span class="info-value">7 مايو 2026</span></div>
-                    <div><span class="info-label">الساعة:</span><span class="info-value">4:00 فجراً</span></div>
-                    <div><span class="info-label">المكان:</span><span class="info-value">نور الدنيا ✨</span></div>
-                </div>
-            </div>
-            <div class="flip-card">
-                <div class="flip-card-inner">
-                    <div class="flip-front">ما معنى اسم آدم? ✨</div>
-                    <div class="flip-back">آدم: هو الإنسان الأول، ومعناه الرجل المخلوق من "أدمة الأرض"، ويرمز للنقاء والبدايات الجديدة.</div>
+                <div class="birth-grid">
+                    <div>اليوم: <span class="val">الخميس</span></div>
+                    <div>التاريخ: <span class="val">7 مايو 2026</span></div>
+                    <div>الساعة: <span class="val">4:00 فجراً</span></div>
+                    <div>السنة: <span class="val">2026</span></div>
                 </div>
             </div>
         </div>
@@ -153,96 +108,97 @@
         <div class="card">
             <p style="font-weight: bold; margin-bottom: 10px;">سجل اسمك ليرحب بك آدم: ✨</p>
             <input type="text" id="guest-name" class="guest-input" placeholder="اكتب اسمك هنا...">
-            <button class="guest-btn" onclick="saveGuestName()">دخول المملكة</button>
-            <div id="welcome-alert" style="margin-top: 15px; color: var(--royal-blue); font-weight: 900; font-size: 18px;"></div>
+            <button class="guest-btn" onclick="saveName()">دخول</button>
+            <div id="welcome-alert" style="margin-top: 10px; color: var(--royal-blue); font-weight: bold;"></div>
         </div>
 
         <div class="card">
             <div style="font-size: 18px; color: #666; font-weight: bold; margin-bottom: 10px;">آدم ينير حياتنا منذ:</div>
             <div class="timer-glow" id="timer">00d : 00h : 00m : 00s</div>
-            <p id="breath-count" style="margin-top: 15px; font-size: 14px; color: var(--royal-blue); font-weight: bold;"></p>
         </div>
 
         <div class="card">
-            <p style="font-weight: bold; margin-bottom: 10px;">اختر هدية لآدم 🎁</p>
-            <button class="gift-btn" onclick="sendGift('🧸')">دبدوب</button>
-            <button class="gift-btn" onclick="sendGift('🎠')">حصان</button>
-            <button class="gift-btn" onclick="sendGift('🍭')">حلوى</button>
+            <p style="font-weight: bold; margin-bottom: 10px;">أرسل حباً لآدم ❤️</p>
+            <button style="background: #ff4d6d; color:white; border:none; padding:12px 30px; border-radius:30px; cursor:pointer; font-weight: bold;" onclick="addHeart()">إرسال قلب ❤️</button>
+            <div id="heart-count" style="margin-top:10px; font-weight:bold; color:#ff4d6d;">0 قلب</div>
         </div>
 
         <div class="card">
-            <div style="font-size: 45px; cursor: pointer; display: inline-block; animation: bounce 2s infinite;" onclick="makeAdamSmile()">🍼</div>
-            <button style="background: #ff4d6d; color:white; border:none; padding:12px 25px; border-radius:30px; cursor:pointer; margin-right:15px; font-weight: bold;" onclick="addHeart()">إرسال قلب ❤️</button>
-            <div id="heart-count" style="margin-top:10px; font-weight:bold; color:#ff4d6d;">0 قلب تم إرساله</div>
+            <div id="welcome-msg" style="line-height: 1.8; text-align: right; font-size: 18px;"></div>
         </div>
 
-        <div class="card">
-            <div id="welcome-msg" class="message-box"></div>
+        <div class="card" style="background: rgba(212, 175, 55, 0.1); border: 1px solid var(--gold);">
+            <p style="margin: 0; font-weight: bold; color: #b8860b;">🌟 مولود اليوم.. برج "الثور" 🐂 ✨</p>
         </div>
 
-        <div class="card" style="background: rgba(212, 175, 55, 0.12); border: 2px solid var(--gold);">
-            <p style="margin: 0; font-weight: bold; color: #b8860b;">🌟 مولود اليوم 7 مايو.. برج "الثور" 🐂 ✨</p>
-            <p style="font-size: 13px; color: #888; margin-top: 8px;">"أُعيذك بكلمات الله التامة من كل شيطان وهامة ومن كل عين لامة" 🤲🏻</p>
-        </div>
-
-        <a href="https://wa.me/201031319239?text=بفضل%20الله%20رزقنا%20اليوم%20بأجمل%20نعمة%20🤍👶🏻%20آدم%20عمر%20الشريف%20نور%20حياتنا%20وفرّح%20قلوبنا..%20ألف%20مليون%20مبروك%20يتربى%20في%20عزكم%20يا%20بطل%20💙" class="btn-wa-cyan">
+        <a href="https://wa.me/201031319239?text=ألف%20مليون%20مبروك%20على%20المولود%20الجميل%20آدم%20عمر%20الشريف" class="btn-wa-cyan">
             <span>🍼</span> شاركنا فرحتنا <span>🍼</span>
         </a>
     </div>
 
     <script>
-        var playerMain;
-        var landingPlayer;
-        var hasActivated = false;
+        var landingPlayer, mainPlayer;
+        var audioEnabled = false;
 
         function onYouTubeIframeAPIReady() {
-            // الأغنية الأولى (الواجهة)
-            landingPlayer = new YT.Player('landing-player', { 
-                height: '0', width: '0', 
-                videoId: 'uOL2OLyuIOQ', 
-                playerVars: { 'autoplay': 1, 'mute': 0, 'enablejsapi': 1, 'playsinline': 1 }
+            landingPlayer = new YT.Player('landing-player', {
+                height: '0', width: '0', videoId: 'uOL2OLyuIOQ',
+                playerVars: { 'autoplay': 1, 'controls': 0, 'mute': 0 }
             });
-            // الأغنية الثانية (المملكة) - الرابط الجديد
-            playerMain = new YT.Player('player', { 
-                height: '0', width: '0', 
-                videoId: 'QW9xOWpF0aI', // الرابط الجديد المظبوط
-                playerVars: { 'playsinline': 1 }
+            mainPlayer = new YT.Player('main-player', {
+                height: '0', width: '0', videoId: 'QW9xOWpF0aI',
+                playerVars: { 'controls': 0 }
             });
         }
 
-        // تنشيط الموسيقى عند أول تفاعل
-        function activateLandingMusic() {
-            if(!hasActivated && landingPlayer && landingPlayer.playVideo) {
+        function enableAudio() {
+            if (!audioEnabled && landingPlayer && landingPlayer.playVideo) {
                 landingPlayer.playVideo();
-                hasActivated = true;
+                audioEnabled = true;
             }
         }
 
         function startApp() {
-            // إيقاف الأولى وتشغيل الثانية
-            if (landingPlayer && landingPlayer.stopVideo) landingPlayer.stopVideo();
-            if (playerMain && playerMain.playVideo) playerMain.playVideo();
+            if (landingPlayer) landingPlayer.stopVideo();
+            if (mainPlayer) mainPlayer.playVideo();
             
             document.getElementById('welcome-screen').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('welcome-screen').style.display = 'none';
                 document.getElementById('main-container').style.display = 'flex';
                 setInterval(updateTimer, 1000);
-                startBalloons();
                 typeWriter();
-                const savedName = localStorage.getItem('adam_guest');
-                if(savedName) document.getElementById('welcome-alert').innerText = `أهلاً بعودتك يا ${savedName}، نورت مملكة آدم! 😍`;
-            }, 1000);
+            }, 800);
         }
 
-        function triggerShake() {
-            const container = document.getElementById('main-container');
-            container.classList.add('shake');
-            setTimeout(() => container.classList.remove('shake'), 500);
+        function updateTimer() {
+            const birth = new Date("2026-05-07T04:00:00");
+            const diff = new Date() - birth;
+            const d = Math.floor(diff/86400000), h = Math.floor(diff%86400000/3600000), m = Math.floor(diff%3600000/60000), s = Math.floor(diff%60000/1000);
+            document.getElementById('timer').innerText = `${d}d : ${h}h : ${m}m : ${s}s`;
         }
 
-        function saveGuestName() {
+        const text = "بفضل الله رزقنا اليوم بأجمل نعمة 🤍👶🏻\n“آدم عمر الشريف” نَوَّر حياتنا وفرّح قلوبنا ✨\nاللهم أنبته نباتًا حسنًا، واجعله من عبادك الصالحين.. 🤲🏻💙";
+        let charI = 0;
+        function typeWriter() {
+            if (charI < text.length) {
+                document.getElementById("welcome-msg").innerHTML += text.charAt(charI) === "\n" ? "<br>" : text.charAt(charI);
+                charI++; setTimeout(typeWriter, 50);
+            }
+        }
+
+        function saveName() {
             const name = document.getElementById('guest-name').value;
-            if(name) {
-                localStorage.setItem('adam_guest', name);
-                document.getElementById('welcome-alert').innerText = `أهلاً بك يا ${name}،
+            if(name) document.getElementById('welcome-alert').innerText = `نورت يا ${name} مملكة آدم! 😍`;
+        }
+
+        function addHeart() {
+            let count = parseInt(document.getElementById('heart-count').innerText) || 0;
+            document.getElementById('heart-count').innerText = (count + 1) + " قلب";
+        }
+
+        var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0]; firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    </script>
+</body>
+</html>
