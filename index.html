@@ -56,6 +56,19 @@
             transition: 0.4s ease; border: 3px solid white;
         }
 
+        /* فقاعة كلام آدم */
+        #speech-bubble {
+            display: none; background: #fff; border: 3px solid var(--baby-blue);
+            padding: 15px 25px; border-radius: 30px; position: relative;
+            margin-bottom: 20px; font-weight: bold; color: var(--royal-blue);
+            font-size: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+        #speech-bubble::after {
+            content: ''; position: absolute; bottom: -15px; left: 50%;
+            border-width: 15px 15px 0; border-style: solid; border-color: var(--baby-blue) transparent;
+            display: block; width: 0; margin-left: -15px;
+        }
+
         /* الحاوية الرئيسية */
         .container { width: 92%; max-width: 550px; display: none; flex-direction: column; gap: 25px; padding: 50px 0; z-index: 10; }
         
@@ -93,13 +106,10 @@
         .flip-front { background: var(--soft-blue); color: var(--royal-blue); border: 2px dashed var(--baby-blue); }
         .flip-back { background: var(--royal-blue); color: white; transform: rotateY(180deg); padding: 15px; font-size: 14px; }
 
-        /* سجل الزوار */
         .guest-input { width: 85%; padding: 12px; border-radius: 15px; border: 2px solid var(--soft-blue); margin-bottom: 10px; text-align: center; outline: none; font-size: 16px; }
         .guest-btn { background: var(--gold); color: white; border: none; padding: 10px 25px; border-radius: 20px; cursor: pointer; font-weight: bold; }
-
         .gift-btn { background: var(--gold); color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; margin: 5px; }
         .message-box { line-height: 2.2; font-size: 20px; color: #2D3436; text-align: right; min-height: 180px; padding: 10px; }
-
         .btn-wa-cyan {
             background: var(--baby-blue); color: white; padding: 22px; border-radius: 40px; text-decoration: none;
             font-weight: bold; font-size: 24px; display: flex; align-items: center; justify-content: center; gap: 15px;
@@ -116,10 +126,13 @@
 <body>
 
     <div id="welcome-screen">
+        <div id="speech-bubble">جاري استقبال الأمير...</div>
         <div style="font-size: 85px; margin-bottom: 20px;">🤴🏻✨</div>
-        <button class="enter-btn" onclick="startApp()">استقبال الأمير آدم 💙</button>
-        <p style="margin-top: 15px; color: #888; font-weight: bold;">أهلاً بك في عالم آدم عمر الشريف</p>
+        <button class="enter-btn" id="start-btn" onclick="startSurpriseSequence()">استقبال الأمير آدم 💙</button>
+        <p style="margin-top: 15px; color: #888; font-weight: bold;">اضغط لسماع صوت آدم</p>
     </div>
+
+    <audio id="baby-laugh" src="https://assets.mixkit.co/active_storage/sfx/1014/1014-preview.mp3"></audio>
 
     <div id="player"></div>
 
@@ -130,7 +143,7 @@
             <div class="flip-card">
                 <div class="flip-card-inner">
                     <div class="flip-front">ما معنى اسم آدم؟ ✨</div>
-                    <div class="flip-back">آدم: هو الإنسان الأول، ومعناه الرجل المخلوق من "أدمة الأرض"، ويرمز للنقاء والبدايات الجديدة.</div>
+                    <div class="flip-back">آدم: هو الإنسان الأول، ومعناه الرجل المخلوق من "أدمة الأرض"، ويرمز للبدايات الجديدة والنقاء.</div>
                 </div>
             </div>
         </div>
@@ -181,26 +194,60 @@
             player = new YT.Player('player', { height: '0', width: '0', videoId: 'QUjbUOfCr7s', events: { 'onReady': () => {} } });
         }
 
+        // تسلسل المفاجأة (ضحكة + كلام + موسيقى)
+        function startSurpriseSequence() {
+            const btn = document.getElementById('start-btn');
+            const bubble = document.getElementById('speech-bubble');
+            const laugh = document.getElementById('baby-laugh');
+
+            btn.style.display = 'none'; 
+            bubble.style.display = 'block';
+            bubble.innerText = "ههههه 😂🍼";
+
+            // 1. تشغيل الضحكة فوراً
+            laugh.play().catch(e => console.log("Audio play blocked"));
+            triggerShake();
+
+            // 2. بعد ثانية واحدة يبدأ الكلام
+            setTimeout(() => {
+                bubble.innerText = "منورين يا حلوين! 😍";
+                
+                // استخدام محرك النطق
+                const synth = window.speechSynthesis;
+                const utterance = new SpeechSynthesisUtterance("منورين يا حلوين");
+                utterance.lang = 'ar-SA';
+                utterance.pitch = 2.0; // صوت طفولي حاد
+                utterance.rate = 0.8;  // هدوء في النطق
+                
+                synth.speak(utterance);
+
+                // 3. بعد انتهاء الكلام نفتح الموقع
+                utterance.onend = function() {
+                    document.getElementById('welcome-screen').style.opacity = '0';
+                    setTimeout(() => {
+                        document.getElementById('welcome-screen').style.display = 'none';
+                        document.getElementById('main-container').style.display = 'flex';
+                        player.playVideo();
+                        setInterval(updateTimer, 1000);
+                        startBalloons();
+                        typeWriter();
+                        checkSavedGuest();
+                    }, 1000);
+                };
+            }, 1500);
+        }
+
         function triggerShake() {
-            const container = document.getElementById('main-container');
+            const container = document.getElementById('main-container') || document.body;
             container.classList.add('shake');
             setTimeout(() => container.classList.remove('shake'), 500);
         }
 
-        function startApp() {
-            document.getElementById('welcome-screen').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('welcome-screen').style.display = 'none';
-                document.getElementById('main-container').style.display = 'flex';
-                player.playVideo();
-                setInterval(updateTimer, 1000);
-                startBalloons();
-                typeWriter();
-                const savedName = localStorage.getItem('adam_guest');
-                if(savedName) {
-                    document.getElementById('welcome-alert').innerText = `أهلاً بعودتك يا ${savedName}، نورت مملكة آدم! 😍`;
-                }
-            }, 1000);
+        function checkSavedGuest() {
+            const savedName = localStorage.getItem('adam_guest');
+            if(savedName) {
+                document.getElementById('welcome-alert').innerText = `أهلاً بعودتك يا ${savedName}، نورت مملكة آدم! 😍`;
+            }
         }
 
         function saveGuestName() {
@@ -233,15 +280,11 @@
         }
 
         let heartCounts = 0;
-        function addHeart() { 
-            heartCounts++; 
-            document.getElementById('heart-count').innerText = heartCounts + " قلب تم إرساله"; 
-            sendGift('❤️');
-            triggerShake(); 
-        }
+        function addHeart() { heartCounts++; document.getElementById('heart-count').innerText = heartCounts + " قلب تم إرساله"; sendGift('❤️'); triggerShake(); }
 
         function makeAdamSmile() {
             triggerShake();
+            document.getElementById('baby-laugh').play();
             alert("آدم بيضحكلك دلوقتي! 😍✨");
             for(let i=0; i<15; i++) createParticle(window.innerWidth/2, window.innerHeight/2);
         }
@@ -257,7 +300,6 @@
         }
 
         document.addEventListener('mousemove', (e) => createParticle(e.pageX, e.pageY));
-        document.addEventListener('touchmove', (e) => createParticle(e.touches[0].pageX, e.touches[0].pageY));
 
         const text = "بفضل الله رزقنا اليوم بأجمل نعمة 🤍👶🏻\n“آدم عمر الشريف” نَوَّر حياتنا وفرّح قلوبنا ✨\nاللهم أنبته نباتًا حسنًا، واجعله من عبادك الصالحين، واحفظه بعينك التي لا تنام 🤲🏻💙\nبما انك وصلت لهنا اعرف انك شخص غالي عندي وحبيت اشاركك فرحتي.. وشكرًا ليك لو شاركنا فرحتنا 🌸🎉";
         let charI = 0;
