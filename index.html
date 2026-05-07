@@ -28,6 +28,7 @@
         }
         @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         
+        /* تأثير الاهتزاز */
         .shake { animation: shakeAnim 0.5s cubic-bezier(.36,.07,.19,.97) both; }
         @keyframes shakeAnim {
             10%, 90% { transform: translate3d(-1px, 0, 0); }
@@ -64,6 +65,7 @@
             position: relative;
         }
 
+        /* برواز بيانات الميلاد */
         .birth-frame {
             border: 2px solid var(--gold);
             border-radius: 25px;
@@ -104,6 +106,7 @@
         .guest-btn { background: var(--gold); color: white; border: none; padding: 10px 25px; border-radius: 20px; cursor: pointer; font-weight: bold; }
         .gift-btn { background: var(--gold); color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; margin: 5px; }
         .message-box { line-height: 2.2; font-size: 20px; color: #2D3436; text-align: right; min-height: 180px; padding: 10px; }
+        
         .btn-wa-cyan {
             background: var(--baby-blue); color: white; padding: 22px; border-radius: 40px; text-decoration: none;
             font-weight: bold; font-size: 24px; display: flex; align-items: center; justify-content: center; gap: 15px;
@@ -112,13 +115,16 @@
         .balloon { position: fixed; font-size: 35px; z-index: -1; animation: floatUp 10s linear infinite; opacity: 0.6; }
         @keyframes floatUp { from { bottom: -100px; opacity: 0; } to { bottom: 110vh; opacity: 1; transform: rotate(360deg); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        #player, #landing-player { position: absolute; top: -1000px; pointer-events: none; }
+        
+        #player, #landing-player { position: absolute; top: -1000px; visibility: hidden; pointer-events: none; }
     </style>
 </head>
-<body onclick="playInitialMusic()"> <div id="welcome-screen">
+<body onclick="activateLandingMusic()">
+    <div id="welcome-screen">
         <div style="font-size: 85px; margin-bottom: 20px;">🤴🏻✨</div>
         <button class="enter-btn" onclick="startApp()">استقبال الأمير آدم 💙</button>
         <p style="margin-top: 15px; color: #888; font-weight: bold;">أهلاً بك في عالم آدم عمر الشريف</p>
+        <p style="font-size: 12px; color: #ccc;">(المس أي مكان لتنشيط الموسيقى 🎶)</p>
     </div>
     
     <div id="landing-player"></div>
@@ -143,35 +149,42 @@
                 </div>
             </div>
         </div>
+
         <div class="card">
             <p style="font-weight: bold; margin-bottom: 10px;">سجل اسمك ليرحب بك آدم: ✨</p>
             <input type="text" id="guest-name" class="guest-input" placeholder="اكتب اسمك هنا...">
             <button class="guest-btn" onclick="saveGuestName()">دخول المملكة</button>
             <div id="welcome-alert" style="margin-top: 15px; color: var(--royal-blue); font-weight: 900; font-size: 18px;"></div>
         </div>
+
         <div class="card">
             <div style="font-size: 18px; color: #666; font-weight: bold; margin-bottom: 10px;">آدم ينير حياتنا منذ:</div>
             <div class="timer-glow" id="timer">00d : 00h : 00m : 00s</div>
             <p id="breath-count" style="margin-top: 15px; font-size: 14px; color: var(--royal-blue); font-weight: bold;"></p>
         </div>
+
         <div class="card">
             <p style="font-weight: bold; margin-bottom: 10px;">اختر هدية لآدم 🎁</p>
             <button class="gift-btn" onclick="sendGift('🧸')">دبدوب</button>
             <button class="gift-btn" onclick="sendGift('🎠')">حصان</button>
             <button class="gift-btn" onclick="sendGift('🍭')">حلوى</button>
         </div>
+
         <div class="card">
             <div style="font-size: 45px; cursor: pointer; display: inline-block; animation: bounce 2s infinite;" onclick="makeAdamSmile()">🍼</div>
             <button style="background: #ff4d6d; color:white; border:none; padding:12px 25px; border-radius:30px; cursor:pointer; margin-right:15px; font-weight: bold;" onclick="addHeart()">إرسال قلب ❤️</button>
             <div id="heart-count" style="margin-top:10px; font-weight:bold; color:#ff4d6d;">0 قلب تم إرساله</div>
         </div>
+
         <div class="card">
             <div id="welcome-msg" class="message-box"></div>
         </div>
+
         <div class="card" style="background: rgba(212, 175, 55, 0.12); border: 2px solid var(--gold);">
             <p style="margin: 0; font-weight: bold; color: #b8860b;">🌟 مولود اليوم 7 مايو.. برج "الثور" 🐂 ✨</p>
             <p style="font-size: 13px; color: #888; margin-top: 8px;">"أُعيذك بكلمات الله التامة من كل شيطان وهامة ومن كل عين لامة" 🤲🏻</p>
         </div>
+
         <a href="https://wa.me/201031319239?text=بفضل%20الله%20رزقنا%20اليوم%20بأجمل%20نعمة%20🤍👶🏻%20آدم%20عمر%20الشريف%20نور%20حياتنا%20وفرّح%20قلوبنا..%20ألف%20مليون%20مبروك%20يتربى%20في%20عزكم%20يا%20بطل%20💙" class="btn-wa-cyan">
             <span>🍼</span> شاركنا فرحتنا <span>🍼</span>
         </a>
@@ -180,33 +193,36 @@
     <script>
         var playerMain;
         var landingPlayer;
-        var isInitialPlayed = false;
+        var hasActivated = false;
 
         function onYouTubeIframeAPIReady() {
+            // الأغنية الأولى (الواجهة)
             landingPlayer = new YT.Player('landing-player', { 
                 height: '0', width: '0', 
                 videoId: 'uOL2OLyuIOQ', 
-                playerVars: { 'autoplay': 1, 'mute': 0, 'enablejsapi': 1, 'playsinline': 1 },
-                events: { 'onReady': onLandingReady } 
+                playerVars: { 'autoplay': 1, 'mute': 0, 'enablejsapi': 1, 'playsinline': 1 }
             });
-            playerMain = new YT.Player('player', { height: '0', width: '0', videoId: 'QUjbUOfCr7s', playerVars: { 'playsinline': 1 } });
+            // الأغنية الثانية (المملكة) - الرابط الجديد
+            playerMain = new YT.Player('player', { 
+                height: '0', width: '0', 
+                videoId: 'QW9xOWpF0aI', // الرابط الجديد المظبوط
+                playerVars: { 'playsinline': 1 }
+            });
         }
 
-        function onLandingReady(e) { 
-            // محاولة التشغيل فوراً، وإذا فشل سينتظر اللمسة
-            e.target.playVideo(); 
-        }
-
-        function playInitialMusic() {
-            if(!isInitialPlayed && landingPlayer && landingPlayer.playVideo) {
+        // تنشيط الموسيقى عند أول تفاعل
+        function activateLandingMusic() {
+            if(!hasActivated && landingPlayer && landingPlayer.playVideo) {
                 landingPlayer.playVideo();
-                isInitialPlayed = true;
+                hasActivated = true;
             }
         }
 
         function startApp() {
+            // إيقاف الأولى وتشغيل الثانية
             if (landingPlayer && landingPlayer.stopVideo) landingPlayer.stopVideo();
             if (playerMain && playerMain.playVideo) playerMain.playVideo();
+            
             document.getElementById('welcome-screen').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('welcome-screen').style.display = 'none';
@@ -229,79 +245,4 @@
             const name = document.getElementById('guest-name').value;
             if(name) {
                 localStorage.setItem('adam_guest', name);
-                document.getElementById('welcome-alert').innerText = `أهلاً بك يا ${name}، نورت مملكة الأمير آدم! 😍`;
-                triggerShake();
-                sendGift('✨');
-            } else { alert("من فضلك اكتب اسمك أولاً ✨"); }
-        }
-
-        function updateTimer() {
-            const birth = new Date("2026-05-07T04:00:00");
-            const diff = new Date() - birth;
-            const d = Math.floor(diff/86400000), h = Math.floor(diff%86400000/3600000), m = Math.floor(diff%3600000/60000), s = Math.floor(diff%60000/1000);
-            document.getElementById('timer').innerText = `${d}d : ${h}h : ${m}m : ${s}s`;
-            const breaths = Math.floor(diff / 1000 / 60 * 40);
-            document.getElementById('breath-count').innerText = `آدم أتمّ تقريباً ${breaths.toLocaleString()} نَفساً في دنيانا 💙`;
-        }
-
-        function sendGift(emoji) {
-            const gift = document.createElement('div');
-            gift.innerHTML = emoji; gift.style.position = 'fixed';
-            gift.style.left = Math.random() * 80 + 10 + 'vw'; gift.style.bottom = '0';
-            gift.style.fontSize = '50px'; gift.style.zIndex = '1000';
-            gift.style.animation = 'floatUp 4s forwards ease-out';
-            document.body.appendChild(gift);
-            setTimeout(() => gift.remove(), 4000);
-        }
-
-        let heartCounts = 0;
-        function addHeart() {
-            heartCounts++;
-            document.getElementById('heart-count').innerText = heartCounts + " قلب تم إرساله";
-            sendGift('❤️');
-            triggerShake();
-        }
-
-        function makeAdamSmile() {
-            triggerShake();
-            alert("آدم بيضحكلك دلوقتي! 😍✨");
-            for(let i=0; i<15; i++) createParticle(window.innerWidth/2, window.innerHeight/2);
-        }
-
-        function createParticle(x, y) {
-            const p = document.createElement('div');
-            p.className = 'particle';
-            p.style.left = x + 'px'; p.style.top = y + 'px';
-            const s = Math.random() * 8 + 4 + 'px';
-            p.style.width = s; p.style.height = s;
-            document.body.appendChild(p);
-            setTimeout(() => p.remove(), 1000);
-        }
-
-        document.addEventListener('mousemove', (e) => createParticle(e.pageX, e.pageY));
-        const text = "بفضل الله رزقنا اليوم بأجمل نعمة 🤍👶🏻\n“آدم عمر الشريف” نَوَّر حياتنا وفرّح قلوبنا ✨\nاللهم أنبته نباتًا حسنًا، واجعله من عبادك الصالحين، واحفظه بعينك التي لا تنام 🤲🏻💙\nبما انك وصلت لهنا اعرف انك شخص غالي عندي وحبيت اشاركك فرحتي.. وشكرًا ليك لو شاركنا فرحتنا 🌸🎉";
-        let charI = 0;
-        function typeWriter() {
-            if (charI < text.length) {
-                const char = text.charAt(charI);
-                document.getElementById("welcome-msg").innerHTML += (char === "\n" ? "<br>" : char);
-                charI++; setTimeout(typeWriter, 50);
-            }
-        }
-
-        function startBalloons() {
-            const icons = ['🎈', '🧸', '🍼', '💙', '✨', '☁️'];
-            setInterval(() => {
-                const b = document.createElement('div');
-                b.className = 'balloon';
-                b.innerHTML = icons[Math.floor(Math.random() * icons.length)];
-                b.style.left = Math.random() * 100 + 'vw';
-                document.body.appendChild(b);
-                setTimeout(() => b.remove(), 10000);
-            }, 1000);
-        }
-        var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0]; firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-    </script>
-</body>
-</html>
+                document.getElementById('welcome-alert').innerText = `أهلاً بك يا ${name}،
