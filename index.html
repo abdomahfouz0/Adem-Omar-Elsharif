@@ -30,9 +30,18 @@
 
         @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
+        /* تأثير الاهتزاز */
+        .shake { animation: shakeAnim 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes shakeAnim {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+
         /* غبار النجوم */
         .particle { position: fixed; pointer-events: none; border-radius: 50%; background: var(--gold); z-index: 9999; animation: fadeParticle 1s forwards; }
-        @keyframes fadeParticle { to { transform: scale(3) rotate(45deg); opacity: 0; } }
+        @keyframes fadeParticle { to { transform: scale(2.5); opacity: 0; } }
 
         /* شاشة الاستقبال */
         #welcome-screen {
@@ -58,18 +67,25 @@
             border: 1px solid rgba(255, 255, 255, 0.7);
             text-align: center;
             animation: fadeIn 1.2s ease-out;
+            position: relative;
         }
 
-        .baby-name { color: var(--royal-blue); font-size: 38px; font-weight: 900; margin: 10px 0; animation: gentlePulse 3s infinite; }
+        .baby-name { 
+            color: var(--royal-blue); font-size: 38px; font-weight: 900; margin: 10px 0;
+            background: linear-gradient(to right, var(--royal-blue) 20%, var(--gold) 40%, var(--gold) 60%, var(--royal-blue) 80%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s linear infinite;
+        }
+        @keyframes shine { to { background-position: 200% center; } }
 
-        /* العداد المطور */
         .timer-glow {
             background: linear-gradient(45deg, var(--baby-blue), var(--royal-blue));
             color: white; padding: 25px; border-radius: 35px; font-size: 24px;
             font-weight: bold; direction: ltr; box-shadow: 0 10px 25px rgba(162, 210, 255, 0.4);
         }
 
-        /* كارت "معنى الاسم" Flip */
         .flip-card { height: 90px; cursor: pointer; perspective: 1000px; margin: 10px 0; }
         .flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
         .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
@@ -77,29 +93,22 @@
         .flip-front { background: var(--soft-blue); color: var(--royal-blue); border: 2px dashed var(--baby-blue); }
         .flip-back { background: var(--royal-blue); color: white; transform: rotateY(180deg); padding: 15px; font-size: 14px; }
 
-        /* البزازة السحرية */
-        .giggle-btn { font-size: 45px; cursor: pointer; animation: bounce 2s infinite; display: inline-block; margin: 10px 0; }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        /* سجل الزوار */
+        .guest-input { width: 85%; padding: 12px; border-radius: 15px; border: 2px solid var(--soft-blue); margin-bottom: 10px; text-align: center; outline: none; font-size: 16px; }
+        .guest-btn { background: var(--gold); color: white; border: none; padding: 10px 25px; border-radius: 20px; cursor: pointer; font-weight: bold; }
 
-        /* تفاعل القلوب */
-        .heart-btn { background: #ff4d6d; color: white; border: none; padding: 15px 35px; border-radius: 40px; cursor: pointer; font-weight: bold; font-size: 18px; box-shadow: 0 8px 20px rgba(255, 77, 109, 0.3); transition: 0.3s; }
-        .heart-btn:hover { transform: scale(1.05); }
-
+        .gift-btn { background: var(--gold); color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; margin: 5px; }
         .message-box { line-height: 2.2; font-size: 20px; color: #2D3436; text-align: right; min-height: 180px; padding: 10px; }
 
-        /* زر الواتساب السماوي بالبزازات */
         .btn-wa-cyan {
             background: var(--baby-blue); color: white; padding: 22px; border-radius: 40px; text-decoration: none;
             font-weight: bold; font-size: 24px; display: flex; align-items: center; justify-content: center; gap: 15px;
             box-shadow: 0 15px 35px rgba(137, 207, 240, 0.4); border: 2.5px solid white; transition: 0.3s;
         }
-        .btn-wa-cyan:hover { transform: translateY(-8px); filter: brightness(1.05); }
 
-        /* زينة طائرة */
-        .balloon { position: fixed; font-size: 35px; z-index: -1; animation: floatBalloon 12s linear infinite; opacity: 0.6; }
-        @keyframes floatBalloon { from { bottom: -100px; } to { bottom: 110vh; } }
+        .balloon { position: fixed; font-size: 35px; z-index: -1; animation: floatUp 10s linear infinite; opacity: 0.6; }
+        @keyframes floatUp { from { bottom: -100px; opacity: 0; } to { bottom: 110vh; opacity: 1; transform: rotate(360deg); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes gentlePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
 
         #player { position: absolute; top: -1000px; }
     </style>
@@ -107,40 +116,48 @@
 <body>
 
     <div id="welcome-screen">
-        <div style="font-size: 85px; margin-bottom: 20px;">🤴🏻✨</div>
+        <div style="font-size: 85px; margin-bottom: 20px;">👸🏻✨</div>
         <button class="enter-btn" onclick="startApp()">استقبال الأمير آدم 💙</button>
-        <p style="margin-top: 15px; color: #888; font-weight: bold; letter-spacing: 1px;">أهلاً بك في عالم آدم الصغير</p>
+        <p style="margin-top: 15px; color: #888; font-weight: bold;">أهلاً بك في عالم آدم عمر الشريف</p>
     </div>
 
     <div id="player"></div>
 
     <div class="container" id="main-container">
         <div class="card">
-            <h2 style="color: var(--gold); margin: 0; font-size: 20px;">بفضل الله أشرقت دنيانا بـ</h2>
+            <h2 style="color: var(--gold); margin: 0; font-size: 18px;">بفضل الله رزقنا بـ</h2>
             <div class="baby-name">آدم عمر الشريف</div>
-            <div style="font-size: 45px; margin-top: 10px;">👑👶🏻</div>
-            
             <div class="flip-card">
                 <div class="flip-card-inner">
-                    <div class="flip-front">ما معنى اسم آدم؟ (المسه لتعرف) ✨</div>
-                    <div class="flip-back">آدم: هو الإنسان الأول، ومعناه الرجل المخلوق من "أدمة الأرض"، ويرمز للبدايات الجديدة، الصفاء، والجمال.</div>
+                    <div class="flip-front">ما معنى اسم آدم؟ ✨</div>
+                    <div class="flip-back">آدم: هو الإنسان الأول، ومعناه الرجل المخلوق من "أدمة الأرض"، ويرمز للبدايات الجديدة والنقاء.</div>
                 </div>
             </div>
         </div>
 
         <div class="card">
-            <div style="font-size: 19px; color: #666; font-weight: bold; margin-bottom: 15px;">آدم ينير حياتنا منذ:</div>
+            <p style="font-weight: bold; margin-bottom: 10px;">سجل اسمك ليرحب بك آدم: ✨</p>
+            <input type="text" id="guest-name" class="guest-input" placeholder="اكتب اسمك هنا...">
+            <button class="guest-btn" onclick="saveGuestName()">دخول المملكة</button>
+            <div id="welcome-alert" style="margin-top: 15px; color: var(--royal-blue); font-weight: 900; font-size: 18px;"></div>
+        </div>
+
+        <div class="card">
+            <div style="font-size: 18px; color: #666; font-weight: bold; margin-bottom: 10px;">آدم ينير حياتنا منذ:</div>
             <div class="timer-glow" id="timer">00d : 00h : 00m : 00s</div>
+            <p id="breath-count" style="margin-top: 15px; font-size: 14px; color: var(--royal-blue); font-weight: bold;"></p>
         </div>
 
         <div class="card">
-            <p style="margin-bottom: 10px; font-weight: bold; color: var(--royal-blue);">دوسي على الببرونة وشوفي ضحكة آدم 🍼</p>
-            <div class="giggle-btn" onclick="makeAdamSmile()">🍼</div>
-            <div id="smile-msg" style="margin-top: 10px; font-weight: bold; color: var(--gold); display: none;">آدم بيضحكلك دلوقتي! 😍</div>
+            <p style="font-weight: bold; margin-bottom: 10px;">اختر هدية لآدم 🎁</p>
+            <button class="gift-btn" onclick="sendGift('🧸')">دبدوب</button>
+            <button class="gift-btn" onclick="sendGift('🎠')">حصان</button>
+            <button class="gift-btn" onclick="sendGift('🍭')">حلوى</button>
         </div>
 
         <div class="card">
-            <button class="heart-btn" onclick="addHeart()">إرسال نبضة حب ❤️</button>
+            <div style="font-size: 45px; cursor: pointer; display: inline-block; animation: bounce 2s infinite;" onclick="makeAdamSmile()">🍼</div>
+            <button style="background: #ff4d6d; color:white; border:none; padding:12px 25px; border-radius:30px; cursor:pointer; margin-right:15px; font-weight: bold;" onclick="addHeart()">إرسال قلب ❤️</button>
             <div id="heart-count" style="margin-top:10px; font-weight:bold; color:#ff4d6d;">0 قلب تم إرساله</div>
         </div>
 
@@ -148,10 +165,8 @@
             <div id="welcome-msg" class="message-box"></div>
         </div>
 
-        <div class="card" style="background: rgba(212, 175, 55, 0.1); border: 2px solid var(--gold);">
-            <p style="margin: 0; font-weight: bold; color: #b8860b; font-size: 18px;">
-                🌟 مولود اليوم 7 مايو.. برج "الثور" 🐂 ✨
-            </p>
+        <div class="card" style="background: rgba(212, 175, 55, 0.12); border: 2px solid var(--gold);">
+            <p style="margin: 0; font-weight: bold; color: #b8860b;">🌟 مولود 7 مايو.. برج "الثور" 🐂 ✨</p>
             <p style="font-size: 13px; color: #888; margin-top: 8px;">"أُعيذك بكلمات الله التامة من كل شيطان وهامة ومن كل عين لامة" 🤲🏻</p>
         </div>
 
@@ -163,10 +178,13 @@
     <script>
         var player;
         function onYouTubeIframeAPIReady() {
-            player = new YT.Player('player', {
-                height: '0', width: '0', videoId: 'QUjbUOfCr7s',
-                events: { 'onReady': () => {} }
-            });
+            player = new YT.Player('player', { height: '0', width: '0', videoId: 'QUjbUOfCr7s', events: { 'onReady': () => {} } });
+        }
+
+        function triggerShake() {
+            const container = document.getElementById('main-container');
+            container.classList.add('shake');
+            setTimeout(() => container.classList.remove('shake'), 500);
         }
 
         function startApp() {
@@ -178,76 +196,24 @@
                 setInterval(updateTimer, 1000);
                 startBalloons();
                 typeWriter();
+                // التحقق من الاسم المحفوظ
+                const savedName = localStorage.getItem('adam_guest');
+                if(savedName) {
+                    document.getElementById('welcome-alert').innerText = `أهلاً بعودتك يا ${savedName}، نورت مملكة آدم! 😍`;
+                }
             }, 1000);
         }
 
-        function makeAdamSmile() {
-            document.getElementById('smile-msg').style.display = 'block';
-            for(let i=0; i<15; i++) {
-                createParticle(window.innerWidth/2 + (Math.random()*50-25), window.innerHeight/2 + (Math.random()*50-25));
-            }
-            setTimeout(() => document.getElementById('smile-msg').style.display = 'none', 3000);
+        function saveGuestName() {
+            const name = document.getElementById('guest-name').value;
+            if(name) {
+                localStorage.setItem('adam_guest', name);
+                document.getElementById('welcome-alert').innerText = `أهلاً بك يا ${name}، نورت مملكة الأمير آدم! 😍`;
+                triggerShake();
+                sendGift('✨');
+            } else { alert("من فضلك اكتب اسمك أولاً ✨"); }
         }
-
-        let heartCounts = 0;
-        function addHeart() {
-            heartCounts++;
-            document.getElementById('heart-count').innerText = heartCounts + " قلب تم إرساله";
-            const h = document.createElement('div');
-            h.innerHTML = '❤️';
-            h.style.position = 'fixed';
-            h.style.left = Math.random() * 100 + 'vw';
-            h.style.bottom = '0';
-            h.style.fontSize = '35px';
-            h.style.animation = 'floatBalloon 3s forwards';
-            document.body.appendChild(h);
-            setTimeout(() => h.remove(), 3000);
-        }
-
-        function createParticle(x, y) {
-            const p = document.createElement('div');
-            p.className = 'particle';
-            p.style.left = x + 'px'; p.style.top = y + 'px';
-            const s = Math.random() * 8 + 4 + 'px';
-            p.style.width = s; p.style.height = s;
-            document.body.appendChild(p);
-            setTimeout(() => p.remove(), 1000);
-        }
-
-        document.addEventListener('mousemove', (e) => createParticle(e.pageX, e.pageY));
-        document.addEventListener('touchmove', (e) => createParticle(e.touches[0].pageX, e.touches[0].pageY));
 
         function updateTimer() {
             const birth = new Date("2026-05-07T04:00:00");
-            const diff = new Date() - birth;
-            const d = Math.floor(diff/86400000), h = Math.floor(diff%86400000/3600000), m = Math.floor(diff%3600000/60000), s = Math.floor(diff%60000/1000);
-            document.getElementById('timer').innerText = `${d}d : ${h}h : ${m}m : ${s}s`;
-        }
-
-        const text = "بفضل الله رزقنا اليوم بأجمل نعمة 🤍👶🏻\n“آدم عمر الشريف” نَوَّر حياتنا وفرّح قلوبنا ✨\nاللهم أنبته نباتًا حسنًا، واجعله من عبادك الصالحين، واحفظه بعينك التي لا تنام 🤲🏻💙\nبما انك وصلت لهنا اعرف انك شخص غالي عندي وحبيت اشاركك فرحتي.. وشكرًا ليك لو شاركنا فرحتنا 🌸🎉";
-        let charI = 0;
-        function typeWriter() {
-            if (charI < text.length) {
-                document.getElementById("welcome-msg").innerHTML += text.charAt(charI) === "\n" ? "<br>" : text.charAt(charI);
-                charI++;
-                setTimeout(typeWriter, 50);
-            }
-        }
-
-        function startBalloons() {
-            const icons = ['🎈', '🧸', '🍼', '💙', '✨', '☁️'];
-            setInterval(() => {
-                const b = document.createElement('div');
-                b.className = 'balloon';
-                b.innerHTML = icons[Math.floor(Math.random() * icons.length)];
-                b.style.left = Math.random() * 100 + 'vw';
-                document.body.appendChild(b);
-                setTimeout(() => b.remove(), 12000);
-            }, 800);
-        }
-
-        var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0]; firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-    </script>
-</body>
-</html>
+            const diff = new
