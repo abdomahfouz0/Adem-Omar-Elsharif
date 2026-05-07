@@ -28,6 +28,7 @@
         }
         @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         
+        /* الاهتزاز */
         .shake { animation: shakeAnim 0.5s both; }
         @keyframes shakeAnim {
             10%, 90% { transform: translate3d(-1px, 0, 0); }
@@ -38,6 +39,7 @@
         .particle { position: fixed; pointer-events: none; border-radius: 50%; background: var(--gold); z-index: 9999; animation: fadeParticle 1s forwards; }
         @keyframes fadeParticle { to { transform: scale(2.5); opacity: 0; } }
 
+        /* شاشة الاستقبال */
         #welcome-screen {
             position: fixed; inset: 0; background: white; z-index: 5000;
             display: flex; align-items: center; justify-content: center; flex-direction: column;
@@ -62,14 +64,6 @@
             position: relative;
         }
 
-        /* كارت الدعاء المطور */
-        .dua-card {
-            border: 2px solid var(--gold);
-            background: linear-gradient(135deg, #fffcf5 0%, #fff 100%);
-            animation: softPulse 4s infinite;
-        }
-        @keyframes softPulse { 0%, 100% { box-shadow: 0 10px 30px rgba(212, 175, 55, 0.1); } 50% { box-shadow: 0 10px 40px rgba(212, 175, 55, 0.3); } }
-
         .baby-name {
             font-size: 38px; font-weight: 900; margin: 10px 0;
             background: linear-gradient(to right, var(--royal-blue) 20%, var(--gold) 40%, var(--gold) 60%, var(--royal-blue) 80%);
@@ -85,10 +79,17 @@
         .info-label { color: var(--gold); font-weight: bold; font-size: 14px; }
         .info-val { color: var(--royal-blue); font-weight: 900; font-size: 16px; display: block; }
 
-        .timer-glow { background: linear-gradient(45deg, var(--baby-blue), var(--royal-blue)); color: white; padding: 25px; border-radius: 35px; font-size: 24px; font-weight: bold; direction: ltr; }
+        .flip-card { height: 90px; cursor: pointer; perspective: 1000px; margin: 10px 0; }
+        .flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
+        .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
+        .flip-front, .flip-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; border-radius: 25px; font-weight: bold; }
+        .flip-front { background: var(--soft-blue); color: var(--royal-blue); border: 2px dashed var(--baby-blue); }
+        .flip-back { background: var(--royal-blue); color: white; transform: rotateY(180deg); padding: 15px; font-size: 14px; }
 
         .guest-input { width: 85%; padding: 12px; border-radius: 15px; border: 2px solid var(--soft-blue); margin-bottom: 10px; text-align: center; outline: none; }
         .gift-btn { background: var(--gold); color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; margin: 5px; }
+
+        .timer-glow { background: linear-gradient(45deg, var(--baby-blue), var(--royal-blue)); color: white; padding: 25px; border-radius: 35px; font-size: 24px; font-weight: bold; direction: ltr; }
 
         .btn-wa-cyan {
             background: var(--baby-blue); color: white; padding: 22px; border-radius: 40px; text-decoration: none;
@@ -101,17 +102,19 @@
         #player-box { position: fixed; top: -1000px; }
     </style>
 </head>
-<body>
+<body onclick="activateInitialMusic()">
 
     <div id="welcome-screen">
         <div style="font-size: 85px; margin-bottom: 20px;">🤴🏻✨</div>
         <button class="enter-btn" onclick="startApp()">استقبال الأمير آدم 💙</button>
         <p style="margin-top: 15px; color: #888; font-weight: bold;">أهلاً بك في عالم آدم عمر الشريف</p>
+        <p style="font-size: 11px; color: #ccc;">(المس الشاشة لتنشيط الموسيقى 🎶)</p>
     </div>
 
     <audio id="baby-laugh" src="https://assets.mixkit.co/active_storage/sfx/1014/1014-preview.mp3"></audio>
 
     <div id="player-box">
+        <div id="landing-player"></div>
         <div id="main-player"></div>
     </div>
 
@@ -124,19 +127,24 @@
                     <div><span class="info-label">اليوم:</span><span class="info-val">الخميس</span></div>
                     <div><span class="info-label">التاريخ:</span><span class="info-val">7 مايو 2026</span></div>
                     <div><span class="info-label">الساعة:</span><span class="info-val">4:00 فجراً</span></div>
-                    <div><span class="info-label">السنة:</span><span class="info-val">2026</span></div>
+                    <div><span class="info-label">المكان:</span><span class="info-val">نور الدنيا ✨</span></div>
+                </div>
+            </div>
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-front">ما معنى اسم آدم؟ ✨</div>
+                    <div class="flip-back">آدم: هو الإنسان الأول، ومعناه الرجل المخلوق من "أدمة الأرض"، ويرمز للجمال والنقاء والبدايات الجديدة.</div>
                 </div>
             </div>
         </div>
 
-        <div class="card dua-card">
-            <h3 style="color: var(--gold); margin: 0 0 15px 0;">🤲🏻 دعاء للأمير آدم</h3>
-            <p style="font-size: 18px; line-height: 1.8; color: var(--royal-blue); font-weight: bold; margin: 0;">
-                "أُعيذُكَ بكلماتِ اللهِ التامَّةِ، مِن كُلِّ شيطانٍ وهامَّةٍ، ومِن كُلِّ عَيْنٍ لامَّةٍ"
+        <div class="card" style="border: 2px solid var(--gold); background: #fffcf5;">
+            <h3 style="color: var(--gold); margin: 0 0 10px 0;">🤲🏻 تحصين الأمير آدم</h3>
+            <p style="font-size: 18px; line-height: 1.6; color: var(--royal-blue); font-weight: bold;">
+                "أُعيذك بكلمات الله التامة من كل شيطان وهامة ومن كل عين لامة"
             </p>
-            <hr style="border: 0; border-top: 1px dashed var(--gold); margin: 15px 0;">
-            <p style="font-size: 16px; color: #555; font-style: italic;">
-                اللهم أنبته نباتاً حسناً، واجعله قرة عين لوالديه، واحفظه بحفظك يا أكرم الأكرمين.
+            <p style="font-size: 15px; color: #555; margin-top: 10px; font-style: italic;">
+                اللهم أنبته نباتاً حسناً واجعله قرة عين لوالديه.
             </p>
         </div>
 
@@ -154,39 +162,58 @@
         </div>
 
         <div class="card">
-            <p style="font-weight: bold; margin-bottom: 10px;">اختر هدية لآدم 🎁</p>
+            <p style="font-weight: bold; margin-bottom: 10px;">اختر هدية لآدم أو أرسل حباً 🎁</p>
             <button class="gift-btn" onclick="sendGift('🧸')">دبدوب</button>
             <button class="gift-btn" onclick="sendGift('🎠')">حصان</button>
             <button class="gift-btn" onclick="sendGift('🍭')">حلوى</button>
+            <div style="margin-top: 20px;">
+                <button style="background: #ff4d6d; color:white; border:none; padding:12px 25px; border-radius:30px; cursor:pointer; font-weight: bold;" onclick="addHeart()">إرسال قلب ❤️</button>
+                <div id="heart-count" style="margin-top:10px; font-weight:bold; color:#ff4d6d;">0 قلب تم إرساله</div>
+            </div>
         </div>
 
         <div class="card">
-            <div style="font-size: 45px; cursor: pointer; display: inline-block; animation: bounce 2s infinite;" onclick="makeAdamSmile()">🍼</div>
-            <button style="background: #ff4d6d; color:white; border:none; padding:12px 25px; border-radius:30px; cursor:pointer; margin-right:15px; font-weight: bold;" onclick="addHeart()">إرسال قلب ❤️</button>
-            <div id="heart-count" style="margin-top:10px; font-weight:bold; color:#ff4d6d;">0 قلب تم إرساله</div>
+            <p style="font-weight: bold; color: var(--royal-blue); margin-bottom: 10px;">المس الببرونة وشوف ضحكة آدم 🍼</p>
+            <div style="font-size: 50px; cursor: pointer; display: inline-block; animation: bounce 2s infinite;" onclick="makeAdamSmile()">🍼</div>
         </div>
 
         <div class="card">
             <div id="welcome-msg" style="line-height: 2; font-size: 19px; text-align: right;"></div>
         </div>
 
-        <a href="https://wa.me/201031319239?text=ألف%20مليون%20مبروك%20على%20المولود%20الجميل%20آدم%20عمر%20الشريف" class="btn-wa-cyan">
+        <div class="card" style="background: rgba(212, 175, 55, 0.1); border: 1px solid var(--gold);">
+            <p style="margin: 0; font-weight: bold; color: #b8860b;">🌟 مولود اليوم.. برج "الثور" 🐂 ✨</p>
+        </div>
+
+        <a href="https://wa.me/201031319239?text=بفضل%20الله%20رزقنا%20اليوم%20بأجمل%20نعمة%20🤍👶🏻%20آدم%20عمر%20الشريف%20نور%20حياتنا%20وفرّح%20قلوبنا..%20ألف%20مليون%20مبروك%20يتربى%20في%20عزكم%20يا%20بطل%20💙" class="btn-wa-cyan">
             <span>🍼</span> شاركنا فرحتنا <span>🍼</span>
         </a>
     </div>
 
     <script>
-        var mainPlayer;
+        var landingPlayer, mainPlayer;
+        var audioStarted = false;
 
         function onYouTubeIframeAPIReady() {
+            landingPlayer = new YT.Player('landing-player', {
+                height: '0', width: '0', videoId: 'uOL2OLyuIOQ',
+                playerVars: { 'autoplay': 1, 'mute': 0, 'enablejsapi': 1 }
+            });
             mainPlayer = new YT.Player('main-player', {
-                height: '0', width: '0', videoId: 'QW9xOWpF0aI',
-                playerVars: { 'autoplay': 0, 'controls': 0 }
+                height: '0', width: '0', videoId: 'QW9xOWpF0aI'
             });
         }
 
+        function activateInitialMusic() {
+            if(!audioStarted && landingPlayer && landingPlayer.playVideo) {
+                landingPlayer.playVideo();
+                audioStarted = true;
+            }
+        }
+
         function startApp() {
-            if (mainPlayer && mainPlayer.playVideo) mainPlayer.playVideo();
+            if (landingPlayer) landingPlayer.stopVideo();
+            if (mainPlayer) mainPlayer.playVideo();
             document.getElementById('welcome-screen').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('welcome-screen').style.display = 'none';
@@ -258,7 +285,7 @@
 
         document.addEventListener('mousemove', (e) => createParticle(e.pageX, e.pageY));
 
-        const text = "بفضل الله رزقنا اليوم بأجمل نعمة 🤍👶🏻\n“آدم عمر الشريف” نَوَّر حياتنا وفرّح قلوبنا ✨\nاللهم أنبته نباتًا حسنًا، واجعله من عبادك الصالحين.. 🤲🏻💙";
+        const text = "بفضل الله رزقنا اليوم بأجمل نعمة 🤍👶🏻\n“آدم عمر الشريف” نَوَّر حياتنا وفرّح قلوبنا ✨\nاللهم أنبته نباتًا حسنًا، واجعله من عبادك الصالحين، واحفظه بعينك التي لا تنام 🤲🏻💙\nبما انك وصلت لهنا اعرف انك شخص غالي عندي وحبيت اشاركك فرحتي.. وشكرًا ليك لو شاركنا فرحتنا 🌸🎉";
         let charI = 0;
         function typeWriter() {
             if (charI < text.length) {
