@@ -1,1 +1,189 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>آدم عمر الشريف ❤️</title>
+    <style>
+        :root {
+            --baby-blue: #89CFF0;
+            --soft-blue: #B2E2F2;
+            --royal-blue: #0047AB;
+            --gold: #D4AF37;
+        }
 
+        body {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            color: #334155;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* العناصر الطائرة في الخلفية */
+        #floating-elements { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+        .item { position: absolute; font-size: 25px; animation: floatUp var(--d) infinite linear; opacity: 0.5; }
+
+        /* شاشة الاستقبال */
+        #welcome-screen {
+            position: fixed; inset: 0; background: white; z-index: 1000;
+            display: flex; align-items: center; justify-content: center; flex-direction: column;
+            transition: 1s ease-in-out;
+        }
+        .enter-btn {
+            background: var(--baby-blue); color: white; padding: 20px 60px;
+            border: none; border-radius: 50px; font-size: 24px; font-weight: bold;
+            cursor: pointer; box-shadow: 0 10px 30px rgba(137, 207, 240, 0.5);
+            transition: 0.3s;
+        }
+        .enter-btn:hover { transform: scale(1.05); background: var(--royal-blue); }
+
+        /* الحاوية الرئيسية */
+        .container { width: 92%; max-width: 550px; display: none; flex-direction: column; gap: 20px; padding: 40px 0; z-index: 10; }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 30px; padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            border: 1px solid rgba(137, 207, 240, 0.2);
+            animation: slideUp 1s ease-out;
+            text-align: center;
+        }
+
+        .baby-name {
+            color: var(--royal-blue); font-size: 34px; font-weight: 900;
+            margin: 10px 0; animation: heartBeat 3s infinite;
+        }
+
+        /* العداد */
+        .timer-title { font-size: 17px; color: #64748b; font-weight: bold; margin-bottom: 10px; }
+        .timer-box {
+            background: linear-gradient(45deg, var(--baby-blue), var(--royal-blue));
+            color: white; padding: 20px; border-radius: 20px; font-size: 22px;
+            font-weight: bold; direction: ltr; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        /* رسالة الترحيب (Typewriter) */
+        .message-box {
+            line-height: 2; font-size: 19px; color: #1e293b;
+            text-align: right; min-height: 120px; position: relative;
+            padding-right: 15px; border-right: 4px solid var(--baby-blue);
+        }
+
+        /* زر الواتساب */
+        .btn-wa {
+            background: #25D366; color: white; padding: 22px;
+            border-radius: 25px; text-decoration: none; font-weight: bold;
+            font-size: 22px; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3); transition: 0.3s;
+            margin-top: 10px;
+        }
+        .btn-wa:hover { transform: scale(1.03); }
+
+        /* أنيميشن */
+        @keyframes heartBeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        @keyframes floatUp { from { bottom: -50px; opacity: 0; } to { bottom: 110vh; opacity: 1; transform: rotate(360deg); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+
+        #player { position: absolute; top: -1000px; }
+    </style>
+</head>
+<body>
+
+    <div id="floating-elements"></div>
+
+    <div id="welcome-screen">
+        <div style="font-size: 70px; margin-bottom: 20px;">👶🏻✨</div>
+        <button class="enter-btn" onclick="startApp()">استقبال الأمير آدم 💙</button>
+    </div>
+
+    <div id="player"></div>
+
+    <div class="container" id="main-container">
+        <div class="card">
+            <h2 style="color: var(--gold); margin: 0; font-size: 20px;">رزقنا بفضل الله بمولودنا</h2>
+            <div class="baby-name">آدم عمر الشريف</div>
+            <div style="font-size: 40px;">👑</div>
+        </div>
+
+        <div class="card">
+            <div class="timer-title">آدم نوّر حياتنا منذ:</div>
+            <div class="timer-box" id="timer">00d : 00h : 00m : 00s</div>
+        </div>
+
+        <div class="card">
+            <div id="welcome-msg" class="message-box"></div>
+        </div>
+
+        <a href="https://wa.me/201031319239?text=ألف%20مليون%20مبروك%20على%20المولود%20الجميل%20آدم%20عمر%20الشريف..%20يتربى%20في%20عزكم%20يا%20بطل%20💙" class="btn-wa">
+            شاركنا فرحتنا 💬
+        </a>
+    </div>
+
+    <script>
+        // إعداد الموسيقى
+        var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0]; firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '0', width: '0',
+                videoId: 'NYntUyksG5E', // موسيقى مبهجة
+                events: { 'onReady': () => {} }
+            });
+        }
+
+        function startApp() {
+            document.getElementById('welcome-screen').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('welcome-screen').style.display = 'none';
+                document.getElementById('main-container').style.display = 'flex';
+                player.playVideo();
+                setInterval(updateTimer, 1000);
+                startFloating();
+                typeWriter();
+            }, 1000);
+        }
+
+        // العداد من الساعة 4 صباحاً اليوم
+        function updateTimer() {
+            const birth = new Date("2026-05-07T04:00:00");
+            const diff = new Date() - birth;
+            const d = Math.floor(diff / 86400000), h = Math.floor(diff%86400000/3600000), m = Math.floor(diff%3600000/60000), s = Math.floor(diff%60000/1000);
+            document.getElementById('timer').innerText = `${d}d : ${h}h : ${m}m : ${s}s`;
+        }
+
+        // تأثير الكتابة (واحدة تلو الأخرى)
+        const text = "بفضل الله رزقنا اليوم بأجمل نعمة 🤍👶🏻\n“آدم عمر الشريف” نَوَّر حياتنا وفرّح قلوبنا ✨\nاللهم أنبته نباتًا حسنًا، واجعله من عبادك الصالحين، واحفظه بعينك التي لا تنام 🤲🏻💙\nبما انك وصلت لهنا اعرف انك شخص غالي عندي وحبيت اشاركك فرحتي.. وشكرًا ليك لو شاركنا فرحتنا 🌸🎉";
+        let charIndex = 0;
+        function typeWriter() {
+            if (charIndex < text.length) {
+                const char = text.charAt(charIndex);
+                document.getElementById("welcome-msg").innerHTML += char === "\n" ? "<br>" : char;
+                charIndex++;
+                setTimeout(typeWriter, 50);
+            }
+        }
+
+        // عناصر طائرة
+        function startFloating() {
+            const container = document.getElementById('floating-elements');
+            const icons = ['🍼', '☁️', '🎈', '✨', '🤍'];
+            setInterval(() => {
+                const item = document.createElement('div');
+                item.className = 'item';
+                item.innerHTML = icons[Math.floor(Math.random() * icons.length)];
+                item.style.left = Math.random() * 100 + 'vw';
+                item.style.setProperty('--d', (Math.random() * 5 + 5) + 's');
+                container.appendChild(item);
+                setTimeout(() => item.remove(), 8000);
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
